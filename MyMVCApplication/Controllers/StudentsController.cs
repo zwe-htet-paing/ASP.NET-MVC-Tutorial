@@ -9,13 +9,8 @@ namespace MyMVCApplication.Controllers
 {
     public class StudentsController : Controller
     {
-        // GET: Students
-        
-        public ActionResult Index()
-        {
-            var studentList = new List<Student>
-            {
-                new Student() {StudentId = 1, StudentName = "John", Age = 18},
+        static IList<Student> studentList = new List<Student>{
+                new Student() { StudentId = 1, StudentName = "John", Age = 18 } ,
                 new Student() { StudentId = 2, StudentName = "Steve",  Age = 21 } ,
                 new Student() { StudentId = 3, StudentName = "Bill",  Age = 25 } ,
                 new Student() { StudentId = 4, StudentName = "Ram" , Age = 20 } ,
@@ -23,92 +18,36 @@ namespace MyMVCApplication.Controllers
                 new Student() { StudentId = 4, StudentName = "Chris" , Age = 17 } ,
                 new Student() { StudentId = 4, StudentName = "Rob" , Age = 19 }
             };
-            return View(studentList);
 
+        // GET: Student
+        public ActionResult Index()
+        {
+            //fetch students from the DB using Entity Framework here
+
+            return View(studentList.OrderBy(s => s.StudentId).ToList());
         }
-        /*
-         public string Index()
-         {
-             return "This is Index action method of StudentController";
-         }
 
-         [HttpPost]
-         public ActionResult Edit(Student std)
-         {
-             //update student to the database
+        public ActionResult Edit(int Id)
+        {
+            //here, get the student from the database in the real application
 
-             return RedirectToAction("Index");
-         }
+            //getting a student from collection for demo purpose
+            var std = studentList.Where(s => s.StudentId == Id).FirstOrDefault();
 
-         [HttpDelete]
-         public ActionResult Delete(int id)
-         {
-             //delete student from database whose id matches with specified id
-             return RedirectToAction("Index");
-         }
+            return View(std);
+        }
 
-         [ActionName("Find")]  // Action Selector - ActionName
-         public ActionResult GetById (int id)
-         {
-             //get student  form the database
-             return View();
-         }
+        [HttpPost]
+        public ActionResult Edit(Student std)
+        {
+            //update student in DB using EntityFramework in real-life application
 
-         [NonAction] // Action Selector - NonAciton
-         public Student GetStudent(int id)
-         {
-             return studentList.Where(s => s.StudentId == id).FirstOrDefault();
-         }
+            //update list by removing old student and adding updated student for demo purpose
+            var student = studentList.Where(s => s.StudentId == std.StudentId).FirstOrDefault();
+            studentList.Remove(student);
+            studentList.Add(std);
 
-
-         //Aciton Selector - ActionVerbs
-         public ActionResult Index() // handles GET requests by default
-         {
-             return View();
-         }
-
-         [HttpPost]
-         public ActionResult PostAction() // handles POST requests by default
-         {
-             return View("Index");
-         }
-
-
-         [HttpPut]
-         public ActionResult PutAction() // handles PUT requests by default
-         {
-             return View("Index");
-         }
-
-         [HttpDelete]
-         public ActionResult DeleteAction() // handles DELETE requests by default
-         {
-             return View("Index");
-         }
-
-         [HttpHead]
-         public ActionResult HeadAction() // handles HEAD requests by default
-         {
-             return View("Index");
-         }
-
-         [HttpOptions]
-         public ActionResult OptionsAction() // handles OPTION requests by default
-         {
-             return View("Index");
-         }
-
-         [HttpPatch]
-         public ActionResult PatchAction() // handles PATCH requests by default
-         {
-             return View("Index");
-         }
-
-         [AcceptVerbs(HttpVerbs.Post | HttpVerbs.Get)] //handles multiple ActionVerbs
-         public ActionResult GetAndPostAction()
-         {
-             return RedirectToAction("Index");
-         }
-          */
+            return RedirectToAction("Index");
+        }
     }
 }
