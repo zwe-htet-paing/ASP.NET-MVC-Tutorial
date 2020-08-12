@@ -16,7 +16,7 @@ namespace MyMVCApplication
             routes.MapRoute(
                 name: "Student",
                 url: "students/{id}",
-                defaults: new { Controller = "Student", action = "Index",
+                defaults: new { Controller = "Students", action = "Index",
                 id = UrlParameter.Optional,
                 name = UrlParameter.Optional,
                 standardId = UrlParameter.Optional
